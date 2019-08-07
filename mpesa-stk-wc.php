@@ -561,7 +561,7 @@ You will receive a confirmation message shortly thereafter.', 'woocommerce' ),
 			$endpoint = ( $this->mpesa_env == 'live' ) ? 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest' : 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
 
 			$timestamp = date( 'YmdHis' );
-	        $password = base64_encode( $this->mpesa_shortcode.$this->mpesa_passkey.$timestamp );
+	        $password = base64_encode( $this->mpesa_headoffice.$this->mpesa_passkey.$timestamp );
 	        $curl = curl_init();
 	        curl_setopt( $curl, CURLOPT_URL, $endpoint );
 	        curl_setopt(
