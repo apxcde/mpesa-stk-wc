@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: MPesa STK For WooCommerce
- * Plugin URI: https://wc-mpesa.nineafrica.com/
+ * Plugin URI: https://marketplace.nineafrica.com/mpesa-stk-wc
  * Description: This plugin extends WordPress and WooCommerce functionality to integrate MPesa stk push for making and receiving online payments.
- * Author: Nineafrica < info@nineafrica.com >
- * Version: 1.0.1@beta
- * Author URI: https://nineafrica.com/
+ * Author: Payvic < info@nineafrica.com >
+ * Version: 1.0.0
+ * Author URI: https://payvic.nineafrica.com/
  *
  *
  */
@@ -87,9 +87,9 @@ function mpesa_row_meta( $links, $file )
 
 	if ( $plugin == $file ) {
 		$row_meta = array(
-			'github'    => '<a href="' . esc_url( 'https://github.com/nineafrica/nineafrica-wc-mpesa/' ) . '" target="_blank" aria-label="' . esc_attr__( 'Contribute on Github', 'woocommerce' ) . '">' . esc_html__( 'Github', 'woocommerce' ) . '</a>',
+			'github'    => '<a href="' . esc_url( 'https://github.com/payvic/mpesa-stk-wc/' ) . '" target="_blank" aria-label="' . esc_attr__( 'Contribute on Github', 'woocommerce' ) . '">' . esc_html__( 'Github', 'woocommerce' ) . '</a>',
 			'apidocs' => '<a href="' . esc_url( 'https://developer.safaricom.co.ke/docs/' ) . '" target="_blank" aria-label="' . esc_attr__( 'MPesa API Docs ( Daraja )', 'woocommerce' ) . '">' . esc_html__( 'API docs', 'woocommerce' ) . '</a>',
-			'pro' => '<a href="' . esc_url( 'https://wc-mpesa.nineafrica.com/' ) . '" target="_blank" aria-label="' . esc_attr__( 'Get Pro Version', 'woocommerce' ) . '">' . esc_html__( 'Get pro', 'woocommerce' ) . '</a>'
+			'pro' => '<a href="' . esc_url( 'https://marketplace.nineafrica.com/mpesa-stk-wc' ) . '" target="_blank" aria-label="' . esc_attr__( 'Get Pro Version', 'woocommerce' ) . '">' . esc_html__( 'Get pro', 'woocommerce' ) . '</a>'
 		 );
 
 		return array_merge( $links, $row_meta );
@@ -204,7 +204,7 @@ function wc_mpesa_gateway_init()
 			$this->id                 		= 'mpesa';
 			$this->icon               		= apply_filters( 'woocommerce_mpesa_icon', plugins_url( 'mpesa.png', __FILE__ ) );
 			$this->method_title       		= __( 'Lipa Na MPesa', 'woocommerce' );
-			$this->method_description 		= __( '<h4 style="color: red;">IMPORTANT!</h4><li>Please <a href="https://developer.safaricom.co.ke/" target="_blank" >create an app on Daraja</a> if you haven\'t. Fill in the app\'s consumer key and secret below.</li><li>For security purposes, and for the MPesa Instant Payment Notification to work, ensure your site is running over https(SSL).</li>'.$reg_notice.$test_cred ).'<li>We offer test to production migration service at a flat fee of 5000 KES/$50. Call <a href="tel:+254705287169">+254705287169</a> or email <a href="mailto:info@nineafrica.com">info@nineafrica.com</a> if you need help.</li>';
+			$this->method_description 		= __( '<h4 style="color: red;">IMPORTANT!</h4><li>Please <a href="https://developer.safaricom.co.ke/" target="_blank" >create an app on Daraja</a> if you haven\'t. Fill in the app\'s consumer key and secret below.</li><li>For security purposes, and for the MPesa Instant Payment Notification to work, ensure your site is running over https(SSL).</li>'.$reg_notice.$test_cred ).'<li>We offer test to production migration service at a flat fee of 5000 KES/$50. Email <a href="mailto:info@nineafrica.com">info@nineafrica.com</a> if you need help.</li>';
 			$this->has_fields         		= false;
 
 			// Load settings

@@ -2,7 +2,7 @@
 /**
  * @package MPesa STK For WooCommerce
  * @subpackage Menus
- * @author Nineafrica < info@nineafrica.com >
+ * @author Payvic < info@nineafrica.com >
  * @since 0.18.01
  */
 

@@ -3,7 +3,7 @@
 /**
  * @package MPesa STK For WooCommerce
  * @subpackage Menus
- * @author Nineafrica < info@nineafrica.com >
+ * @author Payvic < info@nineafrica.com >
  * @since 0.18.01
  */
 
@@ -66,7 +66,7 @@ function mpesa_transactions_menu_about()
 
         <h3>The Plugin</h3>
         <article>
-            <p>This plugin builds on the work of <a href="https://github.com/moshthepitt/woocommerce-lipa-na-mpesa">Kelvin Jayanoris</a>, the <a href="https://nineafrica.com">Nineafrica </a> developers and others to provide a simple plug-n-play implementation for integrating MPesa Payments into online stores built with WooCommerce and WordPress.</p>
+            <p>This plugin builds on the work of <a href="https://github.com/moshthepitt/woocommerce-lipa-na-mpesa">Kelvin Jayanoris</a>, the <a href="https://payvic.nineafrica.com">Payvic </a> developers and others to provide a simple plug-n-play implementation for integrating MPesa Payments into online stores built with WooCommerce and WordPress.</p>
         </article>
 
         <h3>Integration(Going Live)</h3>
@@ -83,7 +83,7 @@ function mpesa_transactions_menu_about()
         </article>
 
         <h3>Contact</h3>
-        <h4>Get in touch with us ( <a href="https://nineafrica.com/">Nineafrica</a> ) either via email ( <a href="mail-to:info@nineafrica.com">info@nineafrica.com</a> ) or via phone( <a href="tel:+254705287169">+254705287169</a> )</h4>
+        <h4>Get in touch with us ( <a href="https://payvic.nineafrica.com/">Payvic</a> ) either via email ( <a href="mail-to:info@nineafrica.com">info@nineafrica.com</a> )</h4>
     </div><?php
 }
 
