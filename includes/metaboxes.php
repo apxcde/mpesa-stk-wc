@@ -2,7 +2,7 @@
 /**
  * @package MPesa STK For WooCommerce
  * @subpackage Metaboxes
- * @author Payvic < info@nineafrica.com >
+ * @author PesaKite < pesakite@nineafrica.com >
  * @since 0.18.01
  */
 

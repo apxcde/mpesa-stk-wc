@@ -61,7 +61,7 @@ Setting up this plugin is pretty straight-forward. Just navigate to the WooComme
 ## GOING LIVE
 
 ```txt
-**NOTE:** We offer assistance with moving from Sandbox(test) to Live (production) at a flat fee of `KSH 5000/$50`
+**NOTE:** We offer assistance with moving from Sandbox(test) to Live (production) at a flat fee of `KSH 6500/$65`
 ```
 
 [Mpesa Web Portal](https://org.ke.m-pesa.com/)
