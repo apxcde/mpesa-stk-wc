@@ -3,11 +3,11 @@
 /**
  * @package MPesa STK For WooCommerce
  * @subpackage Menus
- * @author PesaKite < pesakite@nineafrica.com >
+ * @author Nineafrica < packages@nineafrica.com >
  * @since 0.18.01
  */
 
-add_action( 'admin_menu', 'mpesa_transactions_menu' );
+add_action('admin_menu', 'mpesa_transactions_menu');
 
 function mpesa_transactions_menu()
 {
@@ -66,7 +66,7 @@ function mpesa_transactions_menu_about()
 
         <h3>The Plugin</h3>
         <article>
-            <p>This plugin builds on the work of <a href="https://github.com/moshthepitt/woocommerce-lipa-na-mpesa">Kelvin Jayanoris</a>, the <a href="https://pesakite.nineafrica.com">PesaKite </a> developers and others to provide a simple plug-n-play implementation for integrating MPesa Payments into online stores built with WooCommerce and WordPress.</p>
+            <p>This plugin builds on the work of <a href="https://github.com/moshthepitt/woocommerce-lipa-na-mpesa">Kelvin Jayanoris</a>, the <a href="https://nineafrica.com">Nineafrica </a> developers and others to provide a simple plug-n-play implementation for integrating MPesa Payments into online stores built with WooCommerce and WordPress.</p>
         </article>
 
         <h3>Integration(Going Live)</h3>
@@ -83,16 +83,16 @@ function mpesa_transactions_menu_about()
         </article>
 
         <h3>Contact</h3>
-        <h4>Get in touch with us ( <a href="https://pesakite.nineafrica.com/">PesaKite</a> ) either via email ( <a href="mail-to:pesakite@nineafrica.com">pesakite@nineafrica.com</a> )</h4>
+        <h4>Get in touch with us ( <a href="https://nineafrica.com/">Nineafrica</a> ) either via email ( <a href="mail-to:packages@nineafrica.com">packages@nineafrica.com</a> )</h4>
     </div><?php
 }
 
 function mpesa_transactions_menu_transactions()
 {
-	wp_redirect( admin_url( 'edit.php?post_type=mpesaipn' ) );
+    wp_redirect(admin_url('edit.php?post_type=mpesaipn'));
 }
 
 function mpesa_transactions_menu_pref()
 {
-    wp_redirect( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=mpesa' ) );
+    wp_redirect(admin_url('admin.php?page=wc-settings&tab=checkout&section=mpesa'));
 }
