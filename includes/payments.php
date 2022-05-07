@@ -2,7 +2,7 @@
 /**
  * @package MPesa STK For WooCommerce
  * @subpackage Menus
- * @author Nineafica < packages@nineafrica.com >
+ * @author Nineafica <erick@mwamodo.com>
  * @since 0.18.01
  */
 
@@ -39,7 +39,9 @@ function mpesa_payments_post_type()
         'filter_items_list'     => __('Filter payments list', 'woocommerce'),
     );
 
-    $supports = (get_option('woocommerce_mpesa_settings')["env"] == 'live') ? array( 'revisions' ) : array( 'revisions', 'editor' );
+    $supports = (get_option('woocommerce_mpesa_settings')["env"] == 'live') ?
+        array( 'revisions' ) :
+        array( 'revisions', 'editor' );
 
     $args = array(
         'label'                 => __('MPesa Payment', 'woocommerce'),

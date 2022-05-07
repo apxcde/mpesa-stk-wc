@@ -3,11 +3,10 @@
 /**
  * Plugin Name: MPesa STK For WooCommerce
  * Plugin URI: https://nineafrica.com/products
- * Description: This plugin extends WordPress and WooCommerce functionality to integrate MPesa stk push for making and receiving online payments.
- * Author: Nineafrica < packages@nineafrica.com >
- * Version: 1.0.1
+ * Description: This plugin extends WordPress WooCommerce functionality to integrate Mpesa STK push for making and receiving online payments.
+ * Author: Nineafrica <erick@mwamodo.com>
+ * Version: 1.0.0
  * Author URI: https://nineafrica.com/
- *
  *
  */
 
@@ -21,31 +20,30 @@ if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get
 }
 
 define('MPESA_DIR', plugin_dir_path(__FILE__));
-define('MPESA_INC_DIR', MPESA_DIR.'includes/');
-define('WC_MPESA_VERSION', '1.0.0');
+
+const MPESA_INC_DIR = MPESA_DIR . 'includes/';
+const WC_MPESA_VERSION = '1.0.0';
 
 // Admin Menus
 require_once(MPESA_INC_DIR.'menu.php');
 
-//Payments Post Type
+// Payments Post Type
 require_once(MPESA_INC_DIR.'payments.php');
 
-//Payments Metaboxes
+// Payments Metaboxes
 require_once(MPESA_INC_DIR.'metaboxes.php');
 
 function get_post_id_by_meta_key_and_value($key, $value)
 {
     global $wpdb;
+
     $meta = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='".$key."' AND meta_value='".$value."'");
+
     if (is_array($meta) && !empty($meta) && isset($meta[0])) {
         $meta = $meta[0];
     }
 
-    if (is_object($meta)) {
-        return $meta->post_id;
-    } else {
-        return false;
-    }
+    return is_object($meta) ? $meta->post_id : false;
 }
 
 /**
@@ -88,15 +86,13 @@ function mpesa_row_meta($links, $file)
 
     if ($plugin == $file) {
         $row_meta = array(
-            'github'    => '<a href="' . esc_url('https://github.com/mwamodo/mpesa-stk-wc/') . '" target="_blank" aria-label="' . esc_attr__('Contribute on Github', 'woocommerce') . '">' . esc_html__('Github', 'woocommerce') . '</a>',
             'apidocs' => '<a href="' . esc_url('https://developer.safaricom.co.ke/docs/') . '" target="_blank" aria-label="' . esc_attr__('MPesa API Docs ( Daraja )', 'woocommerce') . '">' . esc_html__('API docs', 'woocommerce') . '</a>',
-            'pro' => '<a href="' . esc_url('https://nineafrica.com/products') . '" target="_blank" aria-label="' . esc_attr__('Get Pro Version', 'woocommerce') . '">' . esc_html__('Get pro', 'woocommerce') . '</a>'
          );
 
         return array_merge($links, $row_meta);
     }
 
-    return ( array ) $links;
+    return (array) $links;
 }
 
 /**
@@ -190,7 +186,7 @@ function wc_mpesa_gateway_init()
         public $mpesa_confirmation_url;
         public $mpesa_validation_url;
 
-        public $mpesa_env = 'sanbox';
+        public $mpesa_env = 'sandbox';
 
         /**
          * Constructor for the gateway.
@@ -198,43 +194,45 @@ function wc_mpesa_gateway_init()
         public function __construct()
         {
             $env = get_option('woocommerce_mpesa_settings')["env"];
+
             $reg_notice = '<li><a href="'.home_url('/?mpesa_ipn_register='.$env).'" target="_blank">Click here to register confirmation & validation URLs</a>. You only need to do this once for sandbox and once when you go live.</li>';
             $test_cred = ($env == 'sandbox') ? '<li>You can <a href="https://developer.safaricom.co.ke/test_credentials" target="_blank" >generate sandbox test credentials here</a>.</li>' : '';
             //$reg_notice = has_valid_licence() ? '' : $reg_notice;
 
-            $this->id                 		= 'mpesa';
-            $this->icon               		= apply_filters('woocommerce_mpesa_icon', plugins_url('mpesa.png', __FILE__));
-            $this->method_title       		= __('Lipa Na MPesa', 'woocommerce');
-            $this->method_description 		= __('<h4 style="color: red;">IMPORTANT!</h4><li>Please <a href="https://developer.safaricom.co.ke/" target="_blank" >create an app on Daraja</a> if you haven\'t. Fill in the app\'s consumer key and secret below.</li><li>For security purposes, and for the MPesa Instant Payment Notification to work, ensure your site is running over https(SSL).</li>'.$reg_notice.$test_cred).'<li>We offer test to production migration service at a flat fee of 6500 KES/$65. Email <a href="mailto:packages@nineafrica.com">packages@nineafrica.com</a> if you need help.</li>';
-            $this->has_fields         		= false;
+            $this->id = 'mpesa';
+            $this->icon = apply_filters('woocommerce_mpesa_icon', plugins_url('mpesa.png', __FILE__));
+            $this->method_title = __('Lipa Na MPesa', 'woocommerce');
+            $this->method_description = __('<h4 style="color: red;">IMPORTANT!</h4><li>Please <a href="https://developer.safaricom.co.ke/" target="_blank" >create an app on Daraja</a> if you haven\'t. Fill in the app\'s consumer key and secret below.</li><li>For security purposes, and for the MPesa Instant Payment Notification to work, ensure your site is running over https(SSL).</li>'
+                .$reg_notice.$test_cred);
+            $this->has_fields = false;
 
             // Load settings
             $this->init_form_fields();
             $this->init_settings();
 
             // Get settings
-            $this->title              		= $this->get_option('title');
-            $this->description        		= $this->get_option('description');
-            $this->instructions       		= $this->get_option('instructions');
-            $this->enable_for_methods 		= $this->get_option('enable_for_methods', array());
-            $this->enable_for_virtual 		= $this->get_option('enable_for_virtual', 'yes') === 'yes' ? true : false;
+            $this->title = $this->get_option('title');
+            $this->description = $this->get_option('description');
+            $this->instructions = $this->get_option('instructions');
+            $this->enable_for_methods = $this->get_option('enable_for_methods', array());
+            $this->enable_for_virtual = $this->get_option('enable_for_virtual', 'yes') === 'yes' ? true : false;
 
-            $this->mpesa_name 				= $this->get_option('business');
-            $this->mpesa_shortcode 			= $this->get_option('shortcode');
-            $this->mpesa_headoffice 		= $this->get_option('headoffice');
-            $this->mpesa_type 				= $this->get_option('idtype');
-            $this->mpesa_key 				= $this->get_option('key');
-            $this->mpesa_secret 			= $this->get_option('secret');
-            $this->mpesa_username 			= $this->get_option('username');
-            $this->mpesa_password 			= $this->get_option('password');
-            $this->mpesa_passkey 			= $this->get_option('passkey');
-            $this->mpesa_callback_url 		= rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=reconcile';
-            $this->mpesa_timeout_url 		= rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=timeout';
-            $this->mpesa_result_url 		= rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=reconcile';
-            $this->mpesa_confirmation_url 	= rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=confirm';
-            $this->mpesa_validation_url 	= rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=validate';
+            $this->mpesa_name = $this->get_option('business');
+            $this->mpesa_shortcode = $this->get_option('shortcode');
+            $this->mpesa_headoffice = $this->get_option('headoffice');
+            $this->mpesa_type = $this->get_option('idtype');
+            $this->mpesa_key = $this->get_option('key');
+            $this->mpesa_secret = $this->get_option('secret');
+            $this->mpesa_username = $this->get_option('username');
+            $this->mpesa_password = $this->get_option('password');
+            $this->mpesa_passkey = $this->get_option('passkey');
+            $this->mpesa_callback_url = rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=reconcile';
+            $this->mpesa_timeout_url = rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=timeout';
+            $this->mpesa_result_url = rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=reconcile';
+            $this->mpesa_confirmation_url = rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=confirm';
+            $this->mpesa_validation_url = rtrim(home_url(), '/').':'.$_SERVER['SERVER_PORT'].'/?mpesa_ipn_listener=validate';
 
-            $this->mpesa_env 			= $this->get_option('env');
+            $this->mpesa_env = $this->get_option('env');
 
             $this->mpesa_codes = array(
                 0	=> 'Success',
@@ -278,80 +276,80 @@ function wc_mpesa_gateway_init()
 
             $this->form_fields = array(
                 'enabled' => array(
-                    'title'       => __('Enable/Disable', 'woocommerce'),
-                    'label'       => __('Enable '.$this->method_title, 'woocommerce'),
-                    'type'        => 'checkbox',
+                    'title' => __('Enable/Disable', 'woocommerce'),
+                    'label' => __('Enable '.$this->method_title, 'woocommerce'),
+                    'type' => 'checkbox',
                     'description' => '',
-                    'default'     => 'no',
+                    'default' => 'no',
                  ),
                 'title' => array(
-                    'title'       => __('Method Title', 'woocommerce'),
-                    'type'        => 'text',
+                    'title' => __('Method Title', 'woocommerce'),
+                    'type' => 'text',
                     'description' => __('Payment method name that the customer will see on your checkout.', 'woocommerce'),
-                    'default'     => __('Lipa Na MPesa', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('Lipa Na MPesa', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'env' => array(
-                    'title'       => __('Environment', 'woocommerce'),
-                    'type'        => 'select',
-                    'options' 		=> array(
-                         'sandbox' 	=> __('Sandbox', 'woocommerce'),
-                          'live' 		=> __('Live', 'woocommerce'),
+                    'title' => __('Environment', 'woocommerce'),
+                    'type' => 'select',
+                    'options' => array(
+                         'sandbox' => __('Sandbox', 'woocommerce'),
+                          'live' => __('Live', 'woocommerce'),
                     ),
                     'description' => __('MPesa Environment', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'desc_tip' => true,
                  ),
                 'idtype' => array(
-                    'title'       => __('Identifier Type', 'woocommerce'),
-                    'type'        => 'select',
+                    'title' => __('Identifier Type', 'woocommerce'),
+                    'type' => 'select',
                     'options' => array(
                           /**1 => __( 'MSISDN', 'woocommerce' ),*/
                           4 => __('Paybill Number', 'woocommerce'),
                          2 => __('Till Number', 'woocommerce')
                     ),
                     'description' => __('MPesa Identifier Type', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'desc_tip' => true,
                  ),
                 'headoffice' => array(
-                    'title'       => __('Head Office Number', 'woocommerce'),
-                    'type'        => 'text',
+                    'title' => __('Head Office Number', 'woocommerce'),
+                    'type' => 'text',
                     'description' => __('HO (for Till) or Paybill Number. Use "Online Shortcode" in Sandbox', 'woocommerce'),
-                    'default'     => __('174379', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('174379', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'shortcode' => array(
-                    'title'       => __('Business Shortcode', 'woocommerce'),
-                    'type'        => 'text',
+                    'title' => __('Business Shortcode', 'woocommerce'),
+                    'type' => 'text',
                     'description' => __('Your MPesa Business Till/Paybill Number. Use "Online Shortcode" in Sandbox', 'woocommerce'),
-                    'default'     => __('174379', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('174379', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'key' => array(
-                    'title'       => __('App Consumer Key', 'woocommerce'),
-                    'type'        => 'text',
+                    'title' => __('App Consumer Key', 'woocommerce'),
+                    'type' => 'text',
                     'description' => __('Your App Consumer Key From Safaricom Daraja.', 'woocommerce'),
-                    'default'     => __('9v38Dtu5u2BpsITPmLcXNWGMsjZRWSTG', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('9v38Dtu5u2BpsITPmLcXNWGMsjZRWSTG', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'secret' => array(
-                    'title'       => __('App Consumer Secret', 'woocommerce'),
-                    'type'        => 'text',
+                    'title' => __('App Consumer Secret', 'woocommerce'),
+                    'type' => 'text',
                     'description' => __('Your App Consumer Secret From Safaricom Daraja.', 'woocommerce'),
-                    'default'     => __('bclwIPkcRqw61yUt', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('bclwIPkcRqw61yUt', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'passkey' => array(
-                    'title'       => __('Online Pass Key', 'woocommerce'),
-                    'type'        => 'textarea',
+                    'title' => __('Online Pass Key', 'woocommerce'),
+                    'type' => 'textarea',
                     'description' => __('Used to create a password for use when making a Lipa Na M-Pesa Online Payment API call.', 'woocommerce'),
-                    'default'     => __('bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'description' => array(
-                    'title'       => __('Method Description', 'woocommerce'),
-                    'type'        => 'textarea',
+                    'title' => __('Method Description', 'woocommerce'),
+                    'type' => 'textarea',
                     'description' => __('Payment method description that the customer will see on your checkout.', 'woocommerce'),
-                    'default'     => __('Cross-check your details above before pressing the button below.
+                    'default' => __('Cross-check your details above before pressing the button below.
 Your phone number MUST be registered with MPesa( and ON ) for this to work.
 You will get a pop-up on your phone asking you to confirm the payment.
 Enter your service ( MPesa ) PIN to proceed.
@@ -359,54 +357,54 @@ You will receive a confirmation message shortly thereafter.', 'woocommerce'),
                     'desc_tip'    => true,
                  ),
                 'instructions' => array(
-                    'title'       => __('Instructions', 'woocommerce'),
-                    'type'        => 'textarea',
+                    'title' => __('Instructions', 'woocommerce'),
+                    'type' => 'textarea',
                     'description' => __('Instructions that will be added to the thank you page.', 'woocommerce'),
-                    'default'     => __('Thank you for buying from us. You will receive a confirmation message from MPesa shortly.', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('Thank you for buying from us. You will receive a confirmation message from MPesa shortly.', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'enable_for_methods' => array(
-                    'title'             => __('Enable for shipping methods', 'woocommerce'),
-                    'type'              => 'multiselect',
-                    'class'             => 'wc-enhanced-select',
-                    'css'               => 'width: 400px;',
-                    'default'           => '',
-                    'description'       => __('If MPesa is only available for certain methods, set it up here. Leave blank to enable for all methods.', 'woocommerce'),
-                    'options'           => $shipping_methods,
-                    'desc_tip'          => true,
+                    'title' => __('Enable for shipping methods', 'woocommerce'),
+                    'type' => 'multiselect',
+                    'class' => 'wc-enhanced-select',
+                    'css' => 'width: 400px;',
+                    'default' => '',
+                    'description' => __('If MPesa is only available for certain methods, set it up here. Leave blank to enable for all methods.', 'woocommerce'),
+                    'options' => $shipping_methods,
+                    'desc_tip' => true,
                     'custom_attributes' => array(
                         'data-placeholder' => __('Select shipping methods', 'woocommerce'),
                      ),
                  ),
                 'enable_for_virtual' => array(
-                    'title'             => __('Accept for virtual orders', 'woocommerce'),
-                    'label'             => __('Accept MPesa if the order is virtual', 'woocommerce'),
-                    'type'              => 'checkbox',
-                    'default'           => 'yes',
+                    'title' => __('Accept for virtual orders', 'woocommerce'),
+                    'label' => __('Accept MPesa if the order is virtual', 'woocommerce'),
+                    'type' => 'checkbox',
+                    'default' => 'yes',
                  ),
                 'account' => array(
-                    'title'       => __('Account Name', 'woocommerce'),
-                    'type'        => 'text',
+                    'title' => __('Account Name', 'woocommerce'),
+                    'type' => 'text',
                     'description' => __('Account Name to show to customer in STK Push.', 'woocommerce'),
-                    'default'     => __('Mpesa STK WC', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('Mpesa STK WC', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'accountant' => array(
-                    'title'       => __('Accountant', 'woocommerce'),
-                    'type'        => 'text',
+                    'title' => __('Accountant', 'woocommerce'),
+                    'type' => 'text',
                     'description' => __('ID of WordPress user to assign authorship of payments generated by this plugin', 'woocommerce'),
-                    'default'     => __('1', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'default' => __('1', 'woocommerce'),
+                    'desc_tip' => true,
                  ),
                 'completion' => array(
-                    'title'       => __('Order Status on Payment', 'woocommerce'),
-                    'type'        => 'select',
+                    'title' => __('Order Status on Payment', 'woocommerce'),
+                    'type' => 'select',
                     'options' => array(
                           'complete' => __('Mark order as complete', 'woocommerce'),
                          'processing' => __('Mark order as processing', 'woocommerce')
                     ),
                     'description' => __('What status to set the order after Mpesa payment has been received', 'woocommerce'),
-                    'desc_tip'    => true,
+                    'desc_tip' => true,
                  )
              );
         }
@@ -418,7 +416,7 @@ You will receive a confirmation message shortly thereafter.', 'woocommerce'),
          */
         public function is_available()
         {
-            $order          = null;
+            $order = null;
             $needs_shipping = false;
 
             // Test if shipping is needed first
@@ -652,7 +650,7 @@ You will receive a confirmation message shortly thereafter.', 'woocommerce'),
 
                 $this->instructions .= '<p>Awaiting MPesa confirmation of payment from '.$phone.' for request '.$request_id.'. Check your phone for the STK Prompt.</p>';
 
-                // Return thankyou redirect
+                // Return thank you redirect
                 return array(
                     'result' 	=> 'success',
                     'redirect'	=> $this->get_return_url($order),
@@ -790,10 +788,10 @@ function wc_mpesa_reconcile()
         return;
     }
 
-    $resultCode 						= $response['Body']['stkCallback']['ResultCode'];
-    $resultDesc 						= $response['Body']['stkCallback']['ResultDesc'];
-    $merchantRequestID 					= $response['Body']['stkCallback']['MerchantRequestID'];
-    $checkoutRequestID 					= $response['Body']['stkCallback']['CheckoutRequestID'];
+    $resultCode = $response['Body']['stkCallback']['ResultCode'];
+    $resultDesc = $response['Body']['stkCallback']['ResultDesc'];
+    $merchantRequestID = $response['Body']['stkCallback']['MerchantRequestID'];
+    $checkoutRequestID = $response['Body']['stkCallback']['CheckoutRequestID'];
 
     $post = get_post_id_by_meta_key_and_value('_request_id', $merchantRequestID);
     wp_update_post([ 'post_content' => file_get_contents('php://input'), 'ID' => $post ]);
@@ -812,11 +810,11 @@ function wc_mpesa_reconcile()
     }
 
     if (isset($response['Body']['stkCallback']['CallbackMetadata'])) {
-        $amount 						= $response['Body']['stkCallback']['CallbackMetadata']['Item'][0]['Value'];
-        $mpesaReceiptNumber 			= $response['Body']['stkCallback']['CallbackMetadata']['Item'][1]['Value'];
-        $balance 						= $response['Body']['stkCallback']['CallbackMetadata']['Item'][2]['Value'];
-        $transactionDate 				= $response['Body']['stkCallback']['CallbackMetadata']['Item'][3]['Value'];
-        $phone 							= $response['Body']['stkCallback']['CallbackMetadata']['Item'][4]['Value'];
+        $amount = $response['Body']['stkCallback']['CallbackMetadata']['Item'][0]['Value'];
+        $mpesaReceiptNumber = $response['Body']['stkCallback']['CallbackMetadata']['Item'][1]['Value'];
+        $balance = $response['Body']['stkCallback']['CallbackMetadata']['Item'][2]['Value'];
+        $transactionDate = $response['Body']['stkCallback']['CallbackMetadata']['Item'][3]['Value'];
+        $phone = $response['Body']['stkCallback']['CallbackMetadata']['Item'][4]['Value'];
 
         $after_ipn_paid = round($before_ipn_paid)+round($amount);
         $ipn_balance = $after_ipn_paid-$amount_due;
@@ -866,6 +864,7 @@ function wc_mpesa_timeout()
     if (! isset($_GET['mpesa_ipn_listener'])) {
         return;
     }
+
     if ($_GET['mpesa_ipn_listener'] !== 'timeout') {
         return;
     }
@@ -876,10 +875,10 @@ function wc_mpesa_timeout()
         return;
     }
 
-    $resultCode 					= $response['Body']['stkCallback']['ResultCode'];
-    $resultDesc 					= $response['Body']['stkCallback']['ResultDesc'];
-    $merchantRequestID 				= $response['Body']['stkCallback']['MerchantRequestID'];
-    $checkoutRequestID 				= $response['Body']['stkCallback']['CheckoutRequestID'];
+    $resultCode = $response['Body']['stkCallback']['ResultCode'];
+    $resultDesc = $response['Body']['stkCallback']['ResultDesc'];
+    $merchantRequestID = $response['Body']['stkCallback']['MerchantRequestID'];
+    $checkoutRequestID = $response['Body']['stkCallback']['CheckoutRequestID'];
 
     $post = get_post_id_by_meta_key_and_value('_request_id', $merchantRequestID);
     wp_update_post([ 'post_content' => file_get_contents('php://input'), 'ID' => $post ]);

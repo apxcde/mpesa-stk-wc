@@ -2,7 +2,7 @@
 /**
  * @package MPesa STK For WooCommerce
  * @subpackage Metaboxes
- * @author Nineafrica < packages@nineafrica.com >
+ * @author Nineafrica <erick@mwamodo.com>
  * @since 0.18.01
  */
 
