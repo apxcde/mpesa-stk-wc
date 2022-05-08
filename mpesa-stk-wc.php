@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: MPesa STK For WooCommerce
- * Plugin URI: https://nineafrica.com/products
+ * Plugin URI: https://store.mwamodo.com/
  * Description: This plugin extends WordPress WooCommerce functionality to integrate Mpesa STK push for making and receiving online payments.
- * Author: Nineafrica <erick@mwamodo.com>
+ * Author: Mwamodo <erick@mwamodo.com>
  * Version: 1.0.0
- * Author URI: https://nineafrica.com/
+ * Author URI: https://store.mwamodo.com/
  *
  */
 

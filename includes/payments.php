@@ -1,8 +1,9 @@
 <?php
+
 /**
  * @package MPesa STK For WooCommerce
  * @subpackage Menus
- * @author Nineafica <erick@mwamodo.com>
+ * @author Mwamodo <erick@mwamodo.com>
  * @since 0.18.01
  */
 

@@ -3,7 +3,7 @@
 /**
  * @package MPesa STK For WooCommerce
  * @subpackage Menus
- * @author Nineafrica <erick@mwamodo.com>
+ * @author Mwamodo <erick@mwamodo.com>
  * @since 0.18.01
  */
 
