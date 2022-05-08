@@ -193,7 +193,7 @@ function wc_mpesa_gateway_init()
          */
         public function __construct()
         {
-            $env = get_option('woocommerce_mpesa_settings')["env"];
+            $env = get_option('woocommerce_mpesa_settings') ? get_option('woocommerce_mpesa_settings')["env"] : 'sandbox';
 
             $reg_notice = '<li><a href="'.home_url('/?mpesa_ipn_register='.$env).'" target="_blank">Click here to register confirmation & validation URLs</a>. You only need to do this once for sandbox and once when you go live.</li>';
             $test_cred = ($env == 'sandbox') ? '<li>You can <a href="https://developer.safaricom.co.ke/test_credentials" target="_blank" >generate sandbox test credentials here</a>.</li>' : '';
